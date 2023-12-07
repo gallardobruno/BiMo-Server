@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  //provider = "postgresql"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Motos {
+  id Int @id @default(autoincrement())
+  type String
+  brand String
+  model String
+  year Int
+  km Int
+  price Int
+  photos Int?
+  id_owner Int
+  id_O Owners @relation(fields: [id_owner], references: [id_dni])
+  orders Orders[]
+}
+
+model Orders {
+  id Int @id @default(autoincrement())
+  date DateTime
+  id_moto Int
+  id_M Motos @relation(fields: [id_moto], references: [id]) 
+  id_prospect Int
+  id_P Prospects @relation(fields: [id_prospect], references: [id_dni])
+}
+
+model Owners {
+  id_dni Int @id
+  owner_name String
+  mail String @unique
+  phone Int @unique
+  id_location Int
+  id_L Location @relation(fields: [id_location], references: [id])
+  motos Motos[]
+  bicicle Bicicles[]
+}
+
+model Location {
+  id Int @id @default(autoincrement())
+  city String
+  province String
+  CP Int
+  owners Owners[]
+  prospects Prospects[]
+}
+
+model Prospects {
+  id_dni Int @id 
+  prospect_name String
+  mail String @unique
+  phone Int @unique
+  id_Location Int 
+  id_L Location @relation(fields: [id_Location], references: [id])
+  message String
+  orders Orders[]
+}
+
+model Bicicles {
+  id Int @id @default(autoincrement())
+  type String
+  brand String
+  model String
+  year Int?
+  price Int
+  photos Int?
+  id_owner Int
+  id_O Owners @relation(fields: [id_owner], references: [id_dni])
+}
