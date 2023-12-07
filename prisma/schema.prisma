@@ -27,11 +27,12 @@ model Motos {
 
 model Orders {
   id Int @id @default(autoincrement())
-  date DateTime
+  date DateTime @default(now())
   id_moto Int
   id_M Motos @relation(fields: [id_moto], references: [id]) 
   id_prospect Int
   id_P Prospects @relation(fields: [id_prospect], references: [id_dni])
+  message Messages[]
 }
 
 model Owners {
@@ -61,7 +62,7 @@ model Prospects {
   phone Int @unique
   id_Location Int 
   id_L Location @relation(fields: [id_Location], references: [id])
-  message String
+  message Messages[]
   orders Orders[]
 }
 
@@ -75,4 +76,12 @@ model Bicicles {
   photos Int?
   id_owner Int
   id_O Owners @relation(fields: [id_owner], references: [id_dni])
+}
+
+model Messages {
+  id Int @id @default(autoincrement())
+  id_prospect Int
+  id_P Prospects @relation(fields: [id_prospect], references: [id_dni])
+  id_order Int
+  id_O Orders @relation(fields: [id_order], references: [id])
 }
