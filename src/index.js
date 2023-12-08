@@ -1,6 +1,6 @@
 import express from 'express';
 import motos from './routes/motos.routes.js'
-import bicicles from './routes/bicicles.routes.js'
+import bikes from './routes/bikes.routes.js'
 import locations from './routes/locations.routes.js'
 import messages from './routes/messages.routes.js'
 import orders from './routes/orders.routes.js'
@@ -9,9 +9,9 @@ import prospects from './routes/prospects.route.js'
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 app.use('/api', motos);
-app.use('/api', bicicles);
+app.use('/api', bikes);
 app.use('/api', locations);
 app.use('/api', messages);
 app.use('/api', orders);

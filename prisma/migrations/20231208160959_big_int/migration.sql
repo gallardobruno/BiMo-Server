@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Owners" ALTER COLUMN "phone" SET DATA TYPE BIGINT;
+
+-- AlterTable
+ALTER TABLE "Prospects" ALTER COLUMN "phone" SET DATA TYPE BIGINT;

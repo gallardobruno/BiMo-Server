@@ -36,17 +36,17 @@ model Orders {
 }
 
 model Owners {
-  id_dni Int @id
+  id_dni Int @id @unique 
   owner_name String
   mail String @unique
-  phone Int @unique
+  phone BigInt @unique
   id_location Int
-  id_L Location @relation(fields: [id_location], references: [id])
+  id_L Locations @relation(fields: [id_location], references: [id])
   motos Motos[]
-  bicicle Bicicles[]
+  bike Bikes[]
 }
 
-model Location {
+model Locations {
   id Int @id @default(autoincrement())
   city String
   province String
@@ -56,17 +56,17 @@ model Location {
 }
 
 model Prospects {
-  id_dni Int @id 
+  id_dni Int @id @unique 
   prospect_name String
   mail String @unique
-  phone Int @unique
+  phone BigInt @unique
   id_Location Int 
-  id_L Location @relation(fields: [id_Location], references: [id])
+  id_L Locations @relation(fields: [id_Location], references: [id])
   message Messages[]
   orders Orders[]
 }
 
-model Bicicles {
+model Bikes {
   id Int @id @default(autoincrement())
   type String
   brand String
