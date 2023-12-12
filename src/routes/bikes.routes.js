@@ -12,6 +12,23 @@ router.get('/bikes', async (req, res) => {
 
 //OBTENER UNICO
 
+router.get('/bikes/:id', async (req, res) => {
+    try {
+        const bikeById = await prisma.bikes.findFirst({
+            where: {
+                id: parseInt(req.params.id)
+            },
+            include: {
+                $scalars: true,
+            }
+        });
+
+        return res.json(bikeById);
+    } catch (error) {
+        console.error("Error fetching owner by ID:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
 
 //CREAR
 router.post('/bikes', async (req, res) => {
@@ -38,5 +55,22 @@ router.put('/bikes/:id', async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 })
+
+//ELIMINAR
+
+router.delete('/bikes/:id', async (req, res) => {
+    try {
+        const bikeDelete = await prisma.bikes.delete({
+            where: {
+                id: parseInt(req.params.id)
+            },
+        });
+
+        return res.send(bikeDelete);
+    } catch (error) {
+        console.error("Error fetching owner by ID:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 export default router;

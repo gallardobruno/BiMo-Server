@@ -4,6 +4,9 @@ import { PrismaClient } from "@prisma/client";
 const router = Router();
 const prisma = new PrismaClient()
 
+
+//OBTENER 
+
 router.get('/prospects', async (req, res) => {
     try {
         const prospects = await prisma.prospects.findMany();
@@ -20,6 +23,37 @@ router.get('/prospects', async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+//OBTENER UNICO
+
+
+router.get('/prospects/:id', async (req, res) => {
+    try {
+        const prospectByID = await prisma.prospects.findFirst({
+            where: {
+                id_dni: parseInt(req.params.id)
+            },
+            include: {
+                $scalars: true,
+            }
+        });
+
+        // Convertir BigInt a String directamente en el objeto
+        const prospectStrings = {
+            ...prospectByID,
+            phone: String(prospectByID.phone),
+            // Otros campos de BigInt también pueden necesitar conversión
+        };
+
+        return res.json(prospectStrings);
+    } catch (error) {
+        console.error("Error fetching owner by ID:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
+// CREAR
 
 router.post('/prospects', async (req, res) => {
     try {
@@ -38,5 +72,55 @@ router.post('/prospects', async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+
+//MODIFICAR
+
+router.put('/prospects/:id', async (req, res) => {
+    try {
+        const prospectUpdate = await prisma.prospects.update({
+            where: {
+                id_dni: parseInt(req.params.id)
+            },
+            data: req.body
+        });
+
+        // Convertir BigInt a String directamente en el objeto
+        const prospectUStrings = {
+            ...prospectUpdate,
+            phone: String(prospectUpdate.phone),
+        };
+
+        return res.json(prospectUStrings);
+    } catch (error) {
+        console.error("Error fetching owner by ID:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+//ELIMINAR
+
+router.delete('/prospects/:id', async (req, res) => {
+    try {
+        const prospectDelete = await prisma.prospects.delete({
+            where: {
+                id_dni: parseInt(req.params.id)
+            }
+        });
+
+        // Convertir BigInt a String directamente en el objeto
+        const prospectDStrings = {
+            ...prospectDelete,
+            phone: String(prospectDelete.phone),
+            // Otros campos de BigInt también pueden necesitar conversión
+        };
+
+        return res.send(prospectDStrings);
+    } catch (error) {
+        console.error("Error fetching owner by ID:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 export default router;

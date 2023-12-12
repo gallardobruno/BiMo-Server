@@ -12,6 +12,27 @@ router.get('/locations', async (req, res) => {
     res.json(locations)
 })
 
+//OBTENER UNICO
+
+router.get('/locations/:id', async (req, res) => {
+    try {
+        const locationById = await prisma.locations.findFirst({
+            where: {
+                id: parseInt(req.params.id)
+            },
+            include: {
+                $scalars: true,
+            }
+        });
+
+        return res.json(locationById);
+    } catch (error) {
+        console.error("Error fetching owner by ID:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+
 //CREAR
 
 router.post('/locations', async (req, res) => {
@@ -38,5 +59,22 @@ router.put('/locations/:id', async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 })
+
+//ELIMINAR
+
+router.delete('/locations/:id', async (req, res) => {
+    try {
+        const locationDelete = await prisma.locations.delete({
+            where: {
+                id: parseInt(req.params.id)
+            },
+        });
+
+        return res.send(locationDelete);
+    } catch (error) {
+        console.error("Error fetching owner by ID:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 export default router;
