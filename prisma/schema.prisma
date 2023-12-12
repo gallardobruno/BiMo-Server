@@ -31,6 +31,8 @@ model Orders {
   id_moto Int
   id_M Motos @relation(fields: [id_moto], references: [id]) 
   id_prospect Int
+  id_bike Int
+  id_B Bikes @relation(fields: [id_bike], references: [id])
   id_P Prospects @relation(fields: [id_prospect], references: [id_dni])
   message Messages[]
 }
@@ -76,6 +78,7 @@ model Bikes {
   photos Int?
   id_owner Int
   id_O Owners @relation(fields: [id_owner], references: [id_dni])
+  orders Orders[]
 }
 
 model Messages {
@@ -84,4 +87,5 @@ model Messages {
   id_P Prospects @relation(fields: [id_prospect], references: [id_dni])
   id_order Int
   id_O Orders @relation(fields: [id_order], references: [id])
+  message String?
 }
